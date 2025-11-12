@@ -1,3 +1,3 @@
-<!-- deno run --allow-read --allow-net server.ts -->
+deno install -Af --name denon https://deno.land/x/denon/denon.ts
 
 deno task start
