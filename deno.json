@@ -1,0 +1,25 @@
+{
+  "tasks": {
+    "start": "deno run --allow-net --allow-read server.ts"
+  },
+  "fmt": {
+    "files": {
+      "include": [
+        "./**/*.ts"
+      ]
+    }
+  },
+  "lint": {
+    "files": {
+      "include": [
+        "./**/*.ts"
+      ]
+    }
+  },
+  "imports": {
+    "@lib/": "./lib/",
+    "@views/": "./views/",
+    "@templates/": "./templates/",
+    "hono": "https://deno.land/x/hono@v3.11.7/mod.ts"
+  }
+}

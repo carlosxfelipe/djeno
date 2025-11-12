@@ -1,6 +1,6 @@
-import { Hono } from "https://deno.land/x/hono@v3.11.7/mod.ts";
-import type { Context } from "https://deno.land/x/hono@v3.11.7/mod.ts";
-import { getHomeHtml } from "./views/home.ts";
+import { Hono } from "hono";
+import type { Context } from "hono";
+import { getHomeHtml } from "@views/home.ts";
 
 const app = new Hono();
 

@@ -1,1 +1,3 @@
-deno run --allow-read --allow-net server.ts
+<!-- deno run --allow-read --allow-net server.ts -->
+
+deno task start

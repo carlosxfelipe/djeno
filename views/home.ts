@@ -1,4 +1,4 @@
-import { renderTemplate } from "../lib/djeno.ts";
+import { renderTemplate } from "@lib/djeno.ts";
 
 export function getHomeHtml() {
   const context = {
