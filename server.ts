@@ -1,11 +1,17 @@
 import { Hono } from "hono";
 import type { Context } from "hono";
 import { getHomeHtml } from "@views/home.ts";
+import { getAboutHtml } from "@views/about.ts";
 
 const app = new Hono();
 
 app.get("/", (c: Context) => {
   const html = getHomeHtml();
+  return c.html(html);
+});
+
+app.get("/about", (c: Context) => {
+  const html = getAboutHtml();
   return c.html(html);
 });
 
