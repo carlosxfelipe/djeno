@@ -590,8 +590,11 @@ function renderNodes(
       const val = evalVarExpression(n.expr, context);
       if (val == null) return "";
       if (val instanceof SafeString) return val.toString();
-      if (typeof val === "object") return String(val);
-      return escapeHtml(String(val));
+      try {
+        return escapeHtml(String(val));
+      } catch {
+        return "";
+      }
     }
     if (n.type === "include") {
       const tpl = loader.load(n.path);
