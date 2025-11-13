@@ -3,6 +3,7 @@
 **djeno.ts** é uma biblioteca TypeScript para Deno criada para facilitar o uso de templates HTML de forma simples e rápida, inspirada em frameworks como Django e Jinja2.
 
 - Permite uso de templates com `{%}` tags e `{{ }}` variáveis.
+- Suporte à tag `{% load static %}` para arquivos estáticos, como no Django.
 - Suporta herança de templates, includes, loops e condicionais.
 - Ideal para projetos web leves e didáticos com Deno.
 - Integração fácil com frameworks como Hono.
