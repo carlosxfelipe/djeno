@@ -1,9 +1,12 @@
 import { Hono } from "hono";
+import { serveStatic } from "serveStatic";
 import type { Context } from "hono";
 import { getHomeHtml } from "@views/home.ts";
 import { getAboutHtml } from "@views/about.ts";
 
 const app = new Hono();
+
+app.use("/static/*", serveStatic({ root: "./" }));
 
 app.get("/", (c: Context) => {
   const html = getHomeHtml();

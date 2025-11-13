@@ -1,4 +1,5 @@
 const TEMPLATES_DIR = "./templates";
+const STATIC_URL = "/static";
 
 type Context = Record<string, unknown>;
 type FilterFn = (v: unknown, arg?: unknown) => unknown;
@@ -28,7 +29,9 @@ type Node =
     }
   | { type: "include"; path: string; pos?: TokenPos }
   | { type: "block"; name: string; body: Node[]; pos?: TokenPos }
-  | { type: "extends"; path: string; pos?: TokenPos };
+  | { type: "extends"; path: string; pos?: TokenPos }
+  | { type: "static"; literal?: string; expr?: string; pos?: TokenPos }
+  | { type: "load"; libs: string[]; pos?: TokenPos };
 
 type IfFrame = {
   type: "if-frame";
@@ -65,6 +68,12 @@ function joinPath(...parts: string[]) {
 const filters: Record<string, FilterFn> = {
   upper: (v) => (typeof v === "string" ? v.toUpperCase() : v),
   lower: (v) => (typeof v === "string" ? v.toLowerCase() : v),
+};
+
+filters["static"] = (v: unknown): string => {
+  if (v == null) return STATIC_URL + "/";
+  const p = String(v);
+  return STATIC_URL + (p.startsWith("/") ? p : "/" + p);
 };
 
 class SafeString {
@@ -346,6 +355,24 @@ function parse(tokens: Token[]): Node[] {
         continue;
       }
 
+      if (tag === "load") {
+        const rest = t.content.slice(4).trim();
+        const libs = rest.length ? rest.split(/\s+/) : [];
+        pushNode({ type: "load", libs, pos: t.pos });
+        continue;
+      }
+
+      if (tag === "static") {
+        const raw = t.content.slice(6).trim();
+        const m = raw.match(/^(["\'])([\s\S]+?)\1$/);
+        if (m) {
+          pushNode({ type: "static", literal: m[2], pos: t.pos });
+        } else {
+          pushNode({ type: "static", expr: raw, pos: t.pos });
+        }
+        continue;
+      }
+
       if (tag === "block") {
         const m = t.content.match(/^block\s+(\w+)$/);
         if (!m) throw new Error(`Invalid block at ${t.pos.line}:${t.pos.col}`);
@@ -599,6 +626,24 @@ function renderNodes(
     if (n.type === "include") {
       const tpl = loader.load(n.path);
       return renderNodes(tpl.ast, context, loader);
+    }
+    if (n.type === "load") {
+      return "";
+    }
+    if (n.type === "static") {
+      let p = "";
+      if (n.literal != null) p = n.literal;
+      else if (n.expr != null) {
+        const val = evalVarExpression(n.expr, context);
+        if (val == null) return "";
+        p = String(val);
+      }
+      const outp = p.startsWith("/") ? p : "/" + p;
+      try {
+        return escapeHtml(STATIC_URL + outp);
+      } catch {
+        return "";
+      }
     }
     if (n.type === "block") return renderNodes(n.body, context, loader);
     if (n.type === "if") {
