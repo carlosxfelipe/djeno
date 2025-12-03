@@ -6,5 +6,36 @@
   {% for item in items %}
     <li>{{ item }}</li>
   {% endfor %}
-  </ul>
+  <section
+    class="counter-section"
+    aria-label="Contador interativo"
+    x-data="{
+      value: {{ page_data.count }},
+      init() {
+        const fallback = {{ page_data.count }};
+        const saved = window.localStorage.getItem('homeCounter');
+        if (saved !== null && saved !== '') {
+          const parsed = Number.parseInt(saved, 10);
+          this.value = Number.isNaN(parsed) ? fallback : parsed;
+        }
+        this.$watch('value', (val) => {
+          window.localStorage.setItem('homeCounter', String(val));
+        });
+      }
+    }"
+  >
+    <h3>{{ page_data.message }}</h3>
+    <p>
+      Contagem atual:
+      <strong x-text="value"></strong>
+    </p>
+    <div
+      role="group"
+      aria-label="Controles do contador"
+      class="counter-controls"
+    >
+      <button type="button" @click="value -= 1">-</button>
+      <button type="button" @click="value += 1">+</button>
+    </div>
+  </section>
 {% endblock %}

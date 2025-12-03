@@ -5,7 +5,7 @@ export function getHomeHtml() {
     title: "Home",
     user: { name: "Isabelle" },
     items: ["Item 1", "Item 2", "Item 3"],
-    page_data: { message: "Oi do servidor!", count: 42 },
+    page_data: { message: "Oi do servidor!", count: 10 },
   };
   return renderTemplate("index.html", context);
 }

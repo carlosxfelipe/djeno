@@ -1,0 +1,17 @@
+.counter-section {
+  margin-top: 2rem;
+}
+
+.counter-controls {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 12rem;
+  border: none;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.counter-controls button {
+  flex: 1;
+}
